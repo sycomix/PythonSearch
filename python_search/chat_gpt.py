@@ -85,10 +85,7 @@ Prompt:
         if debug:
             print("Prompt: ", prompt)
 
-        engine = self.MODEL_ENGINE
-        if model is not None:
-            engine = None
-
+        engine = None if model is not None else self.MODEL_ENGINE
         try:
             print("Open AI Key used: ", openai.api_key)
             # Generate a response
@@ -104,7 +101,7 @@ Prompt:
             )
             return completion.choices[0].text.strip()
         except openai.error.RateLimitError as e:
-            print(str(e))
+            print(e)
             from python_search.apps.notification_ui import send_notification
 
             send_notification(str(e))
@@ -135,7 +132,7 @@ class ChatAPI:
             return result.choices[0].message.content
 
         except openai.error.RateLimitError as e:
-            print(str(e))
+            print(e)
             from python_search.apps.notification_ui import send_notification
 
             send_notification(str(e))

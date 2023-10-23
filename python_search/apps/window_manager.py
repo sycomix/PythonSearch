@@ -12,11 +12,11 @@ class WindowManager:
 
     @staticmethod
     def is_gnome():
-        return 0 == os.system("wmctrl -m | grep -i gnome ")
+        return os.system("wmctrl -m | grep -i gnome ") == 0
 
     @staticmethod
     def is_xfce():
-        return 0 == os.system("wmctrl -m | grep -i xfwm4")
+        return os.system("wmctrl -m | grep -i xfwm4") == 0
 
     def hide_window(self, title):
         raise Exception("Not implemented")
@@ -35,7 +35,7 @@ class I3(WindowManager):
         cmd = f'wmctrl -a "{title}" '
         print("Focus on window with cmd:", cmd)
 
-        result = 0 == os.system(cmd)
+        result = os.system(cmd) == 0
 
         if result:
             self.show_window(title)
@@ -43,13 +43,17 @@ class I3(WindowManager):
         return result
 
     def show_window(self, title) -> bool:
-        return 0 == os.system(
-            f"unset I3SOCK ; i3-msg '[title=\"{title}\"] scratchpad show'"
+        return (
+            os.system(
+                f"unset I3SOCK ; i3-msg '[title=\"{title}\"] scratchpad show'"
+            )
+            == 0
         )
 
     def hide_window(self, title) -> bool:
-        return 0 == os.system(
-            f"sleep 0.1; i3-msg '[title=\"{title}\"]  move scratchpad'"
+        return (
+            os.system(f"sleep 0.1; i3-msg '[title=\"{title}\"]  move scratchpad'")
+            == 0
         )
 
 
@@ -60,4 +64,4 @@ class Gnome:
     """
 
     def hide_window(self, title) -> bool:
-        return 0 == os.system(f"xdotool search --name '{title}' windowminimize")
+        return os.system(f"xdotool search --name '{title}' windowminimize") == 0

@@ -48,10 +48,10 @@ class Infrastructure:
         send_notification("Infra setup finished")
 
     def run_service(self, service_name, follow_logs=True):
-        if not service_name in self._RUNNING_INFO:
-            raise Exception("Could not find service: " + service_name)
+        if service_name not in self._RUNNING_INFO:
+            raise Exception(f"Could not find service: {service_name}")
 
-        print("Starting service: " + service_name)
+        print(f"Starting service: {service_name}")
         cmd = f"LOG_FILE={self._RUNNING_INFO[service_name]['log']} wrap_log_command.sh {self._RUNNING_INFO[service_name]['cmd']}"
 
         self._RUNNING_INFO[service_name]["pid"] = self._run_pid(cmd)
@@ -80,7 +80,7 @@ class Infrastructure:
 
         os.system(f" echo '{self.status(json=True)}' > /tmp/infra_status")
         CmdInterpreter(
-            {"cli_cmd": f"  cat /tmp/infra_status | jq . "}
+            {"cli_cmd": "  cat /tmp/infra_status | jq . "}
         ).interpret_default()
 
     def follow_logs(self, service):

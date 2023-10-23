@@ -39,10 +39,7 @@ class Browser:
         Returns the shell command to open the browser
         """
 
-        url_expr = ""
-        if url is not None:
-            url_expr = f"'{url}'"
-
+        url_expr = f"'{url}'" if url is not None else ""
         if browser == "chrome":
             return self._chrome(url_expr)
 
@@ -52,10 +49,7 @@ class Browser:
         return self._chrome(url_expr)
 
     def _firefox(self, url):
-        if is_mac():
-            return f"open -a Firefox {url}"
-
-        return f"firefox {url}"
+        return f"open -a Firefox {url}" if is_mac() else f"firefox {url}"
 
     def _chrome(self, url: str):
         if is_mac():

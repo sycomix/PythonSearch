@@ -105,9 +105,7 @@ class FzfInKitty:
 
 
 def get_kitty_cmd() -> str:
-    if is_mac():
-        return "/Applications/kitty.app/Contents/MacOS/kitty"
-    return "kitty"
+    return "/Applications/kitty.app/Contents/MacOS/kitty" if is_mac() else "kitty"
 
 
 def main():

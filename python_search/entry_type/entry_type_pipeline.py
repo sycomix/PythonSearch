@@ -178,10 +178,9 @@ class Pipeline:
 
             dataset.append([X, has_pipe, has_double_minus, y])
 
-        df = pd.DataFrame(
+        return pd.DataFrame(
             dataset, columns=["input", "has_pipe", "has_double_minus", "label"]
         )
-        return df
 
 
 if __name__ == "__main__":

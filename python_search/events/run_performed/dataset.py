@@ -39,8 +39,8 @@ class EntryExecutedDataset:
         """
         Load old original events stored via spark-streaming
         """
-        data_location = "file://" + DataConfig.OLD_SEARCH_RUNS_PERFORMED_FOLDER
-        print("Loading data from: {}".format(data_location))
+        data_location = f"file://{DataConfig.OLD_SEARCH_RUNS_PERFORMED_FOLDER}"
+        print(f"Loading data from: {data_location}")
 
         return self.spark.read.format("parquet").load_old(data_location)
 
@@ -55,12 +55,10 @@ class EntryExecutedDataset:
         from pyspark.sql.session import SparkSession
 
         spark = SparkSession.builder.getOrCreate()
-        result_df = spark.read.json(
+        return spark.read.json(
             self.load_new_path(),
             schema=EntryExecutedDataset().SCHEMA,
         )
-
-        return result_df
 
     @staticmethod
     def load_new_path():

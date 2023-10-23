@@ -49,7 +49,7 @@ class OfflineEvaluation:
         )
         for index, row in dataset.iterrows():
             if not self.all_keys_exist(row):
-                print(f"Members of entry do not existing any longer skipping row")
+                print("Members of entry do not existing any longer skipping row")
                 continue
 
             print("Entry row: ")
@@ -78,7 +78,7 @@ class OfflineEvaluation:
                 "position_target": result.index(key),
                 "target_key": key,
                 "number_of_items_in_ranking": len(result),
-                "top_result_preview": result[0:3],
+                "top_result_preview": result[:3],
                 "bottom_result_preview": result[-3:],
             }
             print("Single result: ")
@@ -101,16 +101,14 @@ class OfflineEvaluation:
         return result
 
     def all_keys_exist(self, row) -> bool:
-        if (
-            not row.get("key")
-            or not row.get("previous_key")
-            or not row.get("previous_previous_key")
-            or not self._key_exists(row["key"])
-            or not self._key_exists(row["previous_key"])
-            or not self._key_exists(row["previous_previous_key"])
-        ):
-            return False
-        return True
+        return bool(
+            row.get("key")
+            and row.get("previous_key")
+            and row.get("previous_previous_key")
+            and self._key_exists(row["key"])
+            and self._key_exists(row["previous_key"])
+            and self._key_exists(row["previous_previous_key"])
+        )
 
     def get_X_test_split_of_dataset(self, dataset: DataFrame, X_test) -> pd.DataFrame:
         """

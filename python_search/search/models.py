@@ -52,12 +52,11 @@ class PythonSearchMLFlow:
 
         path = f"{BASE_MLFLOW_LOCATON}/{NEXT_ITEM_PREDICTOR_PROJECT_NUMBER}/{run_id}/artifacts/model"
 
-        if model_type == "keras":
-            model = self.mlflow_instance.keras.load_model(path)
-        else:
-            model = self.mlflow_instance.xgboost.load_model(path)
-
-        return model
+        return (
+            self.mlflow_instance.keras.load_model(path)
+            if model_type == "keras"
+            else self.mlflow_instance.xgboost.load_model(path)
+        )
 
     def get_entry_type_classifier(self, run_id):
         return self.mlflow_instance.keras.load_model(

@@ -68,7 +68,7 @@ def interpreter_logger():
     ch.setLevel(logging.WARNING)
     logger.addHandler(ch)
 
-    fh = logging.FileHandler(f"/tmp/debug_interpreter")
+    fh = logging.FileHandler("/tmp/debug_interpreter")
     fh.setLevel(logging.INFO)
     logger.addHandler(fh)
 

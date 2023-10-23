@@ -47,9 +47,7 @@ class Entry:
         if not self.value:
             return ""
         if type(self.value) == str:
-            result = self.value
-            return result
-
+            return self.value
         if "url" in self.value:
             result = self.value.get("url")
 
@@ -68,10 +66,7 @@ class Entry:
 
             result = dill.source.getsource(value)
 
-        if return_str:
-            return str(result)
-
-        return result
+        return str(result) if return_str else result
 
     def get_only_type(self):
         if not self.value:
@@ -89,7 +84,4 @@ class Entry:
         if "cli_cmd" in self.value or "cmd" in self.value:
             return "cli_cmd"
 
-        if "callable" in self.value:
-            return "callable"
-
-        return "snippet"
+        return "callable" if "callable" in self.value else "snippet"

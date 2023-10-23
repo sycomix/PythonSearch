@@ -37,7 +37,7 @@ class Inference:
         if model:
             self._logger.info("Using custom passed model")
         else:
-            self._logger.debug("Next item predictor using run id: " + self.run_id)
+            self._logger.debug(f"Next item predictor using run id: {self.run_id}")
 
         try:
             self._mlflow_model = (
@@ -56,14 +56,14 @@ class Inference:
         Gets the search from the next item _model
         """
         self._logger.debug(
-            "Number of existing keys for inference: " + str(len(self.all_keys))
+            f"Number of existing keys for inference: {len(self.all_keys)}"
         )
         inference_input = (
             predefined_input
             if predefined_input
             else ModelInput.with_given_keys(self._recent_keys[0], self._recent_keys[1])
         )
-        self._logger.debug("Inference input: " + str(inference_input.__dict__))
+        self._logger.debug(f"Inference input: {str(inference_input.__dict__)}")
 
         X = self._model.transform_single(
             {"inference_input": inference_input, "all_keys": self.all_keys}
@@ -73,9 +73,7 @@ class Inference:
         result.sort(key=lambda x: x[1], reverse=True)
 
         only_keys = [entry[0] for entry in result]
-        self._logger.debug(
-            "Ranking inference succeeded, top results {}".format(only_keys[:3])
-        )
+        self._logger.debug(f"Ranking inference succeeded, top results {only_keys[:3]}")
 
         return only_keys
 

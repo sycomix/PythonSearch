@@ -44,12 +44,12 @@ class Mac:
             "⌃Space",
             "Launch python search",
             Mac.START_SHORTCUT_NUMBER,
-            FzfInKitty.focus_kitty_command() + " || python_search_search launch",
+            f"{FzfInKitty.focus_kitty_command()} || python_search_search launch",
         )
         Mac.START_SHORTCUT_NUMBER += 1
 
         for key, content in list(self.configuration.commands.items()):
-            if not type(content) is dict:
+            if type(content) is not dict:
                 continue
 
             if "mac_shortcut" in content:
@@ -122,5 +122,5 @@ enabled = yes
             print("Could not find PID! Restart will fail, try again.")
             return
 
-        os.system("kill -9 " + output)
+        os.system(f"kill -9 {output}")
         time.sleep(3)

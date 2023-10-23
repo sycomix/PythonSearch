@@ -26,7 +26,7 @@ def run(text=None):
         event, values = window.read()
         # End program if user closes window or
         # presses the OK button
-        if event == "Close" or event == sg.WIN_CLOSED:
+        if event in ["Close", sg.WIN_CLOSED]:
             break
 
     window.close()

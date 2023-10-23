@@ -23,8 +23,7 @@ class SemanticSearch:
 
         df = self._read_dataframe()
         data_frame_keys = df['key'].tolist()
-        missing_values = [x for x in keys if x not in data_frame_keys]
-        return missing_values
+        return [x for x in keys if x not in data_frame_keys]
 
     def save_missing_keys(self):
         """
@@ -91,7 +90,7 @@ class SemanticSearch:
     def rank_entries_by_query_similarity(self, query) -> List[str]:
 
         from python_search.apps.notification_ui import send_notification
-        send_notification(f"Starting semantic search")
+        send_notification("Starting semantic search")
         embedding_query = to_embedding([query])[0].numpy()
 
         df = self._read_dataframe()

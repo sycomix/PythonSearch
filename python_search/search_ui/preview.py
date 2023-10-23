@@ -66,10 +66,7 @@ class Preview:
         if type == "Cmd":
             return Fore.RED
 
-        if type in ["Url", "File"]:
-            return Fore.GREEN
-
-        return Fore.BLUE
+        return Fore.GREEN if type in ["Url", "File"] else Fore.BLUE
 
     def _extract_key(self, entry_text):
         key = entry_text.split(":")[0]
@@ -79,9 +76,7 @@ class Preview:
 
     def _build_values_to_print(self, entry_text, key, entry_data) -> dict:
         # the entry content is after the key + a ":" character
-        result = {}
-        result["type"] = "Unknown"
-        result["key"] = key
+        result = {"type": "Unknown", "key": key}
         if "url" in entry_data:
             result["value"] = entry_data.get("url")
             result["type"] = "Url"

@@ -46,10 +46,10 @@ class Evaluate:
             result = inference.get_ranking(forced_previous_key=key)
             print(f"Key: {key}")
 
-            print(f"Top")
-            for i in result[0 : self.NUM_OF_TOP_RESULTS]:
+            print("Top")
+            for i in result[:self.NUM_OF_TOP_RESULTS]:
                 print(f"    {i}")
 
-            print(f"Bottom")
+            print("Bottom")
             for i in result[-self.NUM_OF_BOTTOM_RESULTS :]:
                 print(f"    {i}")

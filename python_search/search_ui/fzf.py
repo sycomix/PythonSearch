@@ -70,16 +70,10 @@ class Fzf:
         return cmd
 
     def get_fzf_cmd(self):
-        if is_mac():
-            return "/usr/local/bin/fzf"
-
-        return "fzf"
+        return "/usr/local/bin/fzf" if is_mac() else "fzf"
 
     def _run_key(self, shortcut: str, wrap_in_terminal=False) -> str:
-        wrap_in_terminal_expr = ""
-        if wrap_in_terminal:
-            wrap_in_terminal_expr = " --wrap_in_terminal=True "
-
+        wrap_in_terminal_expr = " --wrap_in_terminal=True " if wrap_in_terminal else ""
         return f"""--bind "{shortcut}:execute-silent:(nohup run_key {{}}  --query_used {{q}} {wrap_in_terminal_expr} {{}} &)" \
         --bind "{shortcut}:+reload-sync:(sleep 3 && {self._get_rankging_generate_cmd()})" \
         --bind "{shortcut}:+first" \
@@ -99,7 +93,7 @@ class Fzf:
 
     def _get_rankging_generate_cmd(self):
         # in mac we need tensorflow to be installed via conda
-        return f"ps_search --inline_print=True"
+        return "ps_search --inline_print=True"
 
 
 def hide_current_focused_window():

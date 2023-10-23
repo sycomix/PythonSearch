@@ -17,14 +17,13 @@ class PromptEditor:
     ):
         clipboard_content = Clipboard().get_content()
 
-        if not no_clipboard:
-            if prompt_text.find("<CLIPBOARD>"):
-                key = prompt_text.replace("<CLIPBOARD>", clipboard_content)
-            else:
-                key = prompt_text + "\n" + clipboard_content
-        else:
+        if no_clipboard:
             key = prompt_text
 
+        elif prompt_text.find("<CLIPBOARD>"):
+            key = prompt_text.replace("<CLIPBOARD>", clipboard_content)
+        else:
+            key = prompt_text + "\n" + clipboard_content
         result = NewEntryGUI().launch(
             default_key=key,
             default_content="",

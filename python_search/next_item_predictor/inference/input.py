@@ -47,13 +47,9 @@ class ModelInput:
             int(os.environ["FORCE_MONTH"]) if "FORCE_MONTH" in os.environ else now.month
         )
 
-        instance = ModelInput(
+        return ModelInput(
             hour=hour,
             month=month,
             previous_key=previous_key,
             previous_previous_key=previous_previous_key,
         )
-
-        # logging.("Inference input: ", instance.__dict__)
-
-        return instance

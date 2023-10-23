@@ -36,8 +36,7 @@ class RedisEmbeddingsReader:
                 "Number of keys returned from redis does not match the number of embeddings found"
             )
 
-        embedding_mapping = dict(zip(keys, all_embeddings))
-        return embedding_mapping
+        return dict(zip(keys, all_embeddings))
 
     def load_all_keys(self):
         """
@@ -134,14 +133,13 @@ def create_key_indexed_embedding(keys) -> dict[str, np.ndarray]:
         if key in entries:
             body = str(entries[key])
             print(f"For key '{key}', found body to encode: {body}")
-            unique_bodies.append(key + " " + body)
+            unique_bodies.append(f"{key} {body}")
         else:
             print(f"Could not find body for key: {key}")
             unique_bodies.append(key)
 
     embeddings = create_embeddings_from_strings(unique_bodies)
-    embeddings_keys = dict(zip(unique_keys, embeddings))
-    return embeddings_keys
+    return dict(zip(unique_keys, embeddings))
 
 
 def main():

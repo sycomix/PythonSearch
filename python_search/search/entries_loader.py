@@ -10,6 +10,6 @@ class EntriesLoader:
     def load_all_keys() -> List[str]:
         keys = list(ConfigurationLoader().load_entries().keys())
 
-        print("Loaded in total " + str(len(keys)) + " keys")
+        print(f"Loaded in total {len(keys)} keys")
 
         return keys

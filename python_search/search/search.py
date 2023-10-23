@@ -104,17 +104,13 @@ class Search:
         # skip latest entries if we want to use only the base rank
         result = self._build_result(ignore_recent)
 
-        ranking_generated = RankingGenerated(
-            ranking=[i[0] for i in result[0:100]]
-        )
+        ranking_generated = RankingGenerated(ranking=[i[0] for i in result[:100]])
         self._ranking_generator_writer.write(ranking_generated)
-        result_str = self._entries_result.build_entries_result(
+        return self._entries_result.build_entries_result(
             entries=result,
             ranking_uuid=ranking_generated.uuid,
             inline_print=inline_print,
         )
-
-        return result_str
 
     def _try_torerank_via_model(self, stop_on_failure=False):
         if not self._inference:
@@ -132,11 +128,7 @@ class Search:
         Merge the search with the latest entries
         """
 
-        if ignore_recent:
-            result = []
-        else:
-            result = self._latest_keys()
-
+        result = [] if ignore_recent else self._latest_keys()
         for key in self._ranked_keys:
             if key not in self._entries:
                 # key not found in _entries
@@ -157,8 +149,7 @@ class Search:
     def _latest_keys(self):
         result = []
 
-        latest_entries = self._fetch_latest_entries()
-        if latest_entries:
+        if latest_entries := self._fetch_latest_entries():
             for key in latest_entries:
                 if key not in self._entries:
                     # key not found in _entries

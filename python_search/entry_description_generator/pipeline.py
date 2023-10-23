@@ -45,12 +45,9 @@ def run(epochs=50):
     result = extract_string_from_entries(entries)
     dataset = list(zip(result, entries.keys()))
 
-    filtered_dataset: List[Tuple[str, str]] = []
-    for value, key in dataset:
-        if key.startswith("no key"):
-            continue
-        filtered_dataset.append([value, key])
-
+    filtered_dataset: List[Tuple[str, str]] = [
+        [value, key] for value, key in dataset if not key.startswith("no key")
+    ]
     sentences = []
     next_char = []
     max_chars_from_key = 30
@@ -62,7 +59,7 @@ def run(epochs=50):
             if i > (max_chars_from_key - 3):
                 break
 
-            sentence = value[0:100] + " = " + key[0:(i)]
+            sentence = f"{value[:100]} = {key[:i]}"
 
             current_size = len(sentence)
             if current_size < maxlen:
@@ -71,15 +68,15 @@ def run(epochs=50):
             sentences.append(sentence)
             next_char.append(key[i])
 
-    for i, sentence in enumerate(sentences[0:100]):
+    for i, sentence in enumerate(sentences[:100]):
         print(f"sentence: {sentence}, next_char = {next_char[i]} ")
 
     text = " ".join(next_char) + " ".join(sentences)
 
     chars = sorted(list(set(text)))
-    char_indices = dict((char, chars.index(char)) for char in chars)
+    char_indices = {char: chars.index(char) for char in chars}
 
-    chars[0:5]
+    chars[:5]
 
     x = np.zeros((len(sentences), maxlen, len(chars)), dtype=np.bool)
     y = np.zeros((len(sentences), len(chars)), dtype=np.bool)
@@ -106,13 +103,13 @@ def run(epochs=50):
         model.fit(x, y, batch_size=64, epochs=1)
         start_index = random.randint(0, len(text) - maxlen - 1)
         generated_text = text[start_index : start_index + maxlen]
-        print(' -- generating with seed: "' + generated_text + '"')
+        print(f' -- generating with seed: "{generated_text}"')
 
         for temperature in [0.2, 1.2]:
             print(f"\n ----  Temperature: {temperature}, Input text follows: ")
             sys.stdout.write(generated_text)
             print("\n Generated text follows: ")
-            for i in range(30):
+            for _ in range(30):
                 sampled = np.zeros((1, maxlen, len(chars)))
                 for t, char in enumerate(generated_text):
                     sampled[0, t, char_indices[char]] = 1

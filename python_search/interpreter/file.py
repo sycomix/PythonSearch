@@ -41,15 +41,12 @@ class FileInterpreter(BaseInterpreter):
             return "docker_nvim"
 
         if os.path.isdir(self.cmd["file"]):
-            if is_mac():
-                return "open"
-            return "nautilus"
-
-        if file_extension == ".pdf":
-            return "zathura"
-
-        elif file_extension == ".ipynb":
+            return "open" if is_mac() else "nautilus"
+        if file_extension == ".ipynb":
             return "pycharm"
+
+        elif file_extension == ".pdf":
+            return "zathura"
 
         return "docker_nvim"
 

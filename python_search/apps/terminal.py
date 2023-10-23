@@ -26,23 +26,14 @@ class Terminal:
         """
         wraps the command in a terminal but does not execute it
         """
-        shell = (
-            os.environ["PYTHON_SEARCH_CUSTOM_SHELL"]
-            if "PYTHON_SEARCH_CUSTOM_SHELL" in os.environ
-            else "bash"
-        )
+        shell = os.environ.get("PYTHON_SEARCH_CUSTOM_SHELL", "bash")
         shell = "/bin/bash"
         cmd = f'{shell} -c "{cmd}"'
 
-        hold = ""
-        if hold_terminal_open_on_end:
-            hold = " --hold "
-
+        hold = " --hold " if hold_terminal_open_on_end else ""
         from python_search.search_ui.kitty import get_kitty_cmd
 
-        final_cmd = f'{get_kitty_cmd()} {hold} {Terminal.GENERIC_TERMINAL_PARAMS} -T "{title}" {cmd} '
-
-        return final_cmd
+        return f'{get_kitty_cmd()} {hold} {Terminal.GENERIC_TERMINAL_PARAMS} -T "{title}" {cmd} '
 
     def get_background_color(self):
         if self.configuration.get_fzf_theme() == "light":

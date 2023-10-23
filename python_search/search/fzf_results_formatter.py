@@ -25,9 +25,10 @@ class FzfOptimizedSearchResultsBuilder:
     ) -> str:
         """Build the string to be printed in fzf"""
         position = 1
-        result = ""
         if self.degraded_message:
             result = f"Degraded: {self.degraded_message}\n"
+        else:
+            result = ""
         for name, content in entries:
             try:
                 if "snippet" in content:
@@ -40,10 +41,7 @@ class FzfOptimizedSearchResultsBuilder:
                 content["uuid"] = ranking_uuid
                 content["tags"] = content["tags"] if "tags" in content else []
 
-                initials = ""
-                for word in name.split(" "):
-                    if len(word):
-                        initials += word[0]
+                initials = "".join(word[0] for word in name.split(" ") if len(word))
                 content["tags"].append(initials)
 
                 content_str = json.dumps(content, default=tuple, ensure_ascii=True)
@@ -53,10 +51,7 @@ class FzfOptimizedSearchResultsBuilder:
 
             position = position + 1
 
-            content_str = (
-                f"{name}                                                                                                      :"
-                + content_str
-            )
+            content_str = f"{name}                                                                                                      :{content_str}"
             #  replaces all single quotes for double ones
             #  otherwise the json does not get rendered
             content_str = content_str.replace("'", '"')
@@ -72,11 +67,4 @@ class FzfOptimizedSearchResultsBuilder:
 
 
 def sanitize(content):
-    result = ""
-    for char in content:
-        if char.isalnum():
-            result += char
-        else:
-            result += " "
-
-    return result
+    return "".join(char if char.isalnum() else " " for char in content)

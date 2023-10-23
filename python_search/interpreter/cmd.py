@@ -68,7 +68,7 @@ class CmdInterpreter(BaseInterpreter):
 
         logger.info("Running it in a new terminal")
 
-        hold_terminal = False if "not_hold_terminal" in self.cmd else True
+        hold_terminal = "not_hold_terminal" not in self.cmd
         cmd = Terminal().wrap_cmd_into_terminal(
             cmd,
             title=self._get_window_title(),
@@ -121,5 +121,4 @@ def remove_special_chars(string, exceptions=[]):
     """
     Remove all special chars from strings except if they are one of the exceptions
     """
-    result = "".join(e for e in string if e.isalnum() or e in exceptions)
-    return result
+    return "".join(e for e in string if e.isalnum() or e in exceptions)

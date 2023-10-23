@@ -61,7 +61,7 @@ open ai documentation: https://platform.openai.com/docs/introduction | url
         result = self.generate_body(prompt=query, few_shot=True)
 
         type = result.split("|")[-1]
-        content = result[0 : -len(type) - 1]
+        content = result[:-len(type) - 1]
         content = content.strip()
         type = type.strip()
 

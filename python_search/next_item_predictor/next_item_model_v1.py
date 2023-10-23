@@ -157,14 +157,11 @@ class NextItemBaseModelV1(BaseModel):
 
         keys = []
         for collected_keys in collected_keys:
-            keys.append(collected_keys.key)
-            keys.append(collected_keys.previous_key)
-
+            keys.extend((collected_keys.key, collected_keys.previous_key))
         return keys
 
     def load_mlflow_model(self, run_id=None):
-        model = PythonSearchMLFlow().get_next_predictor_model(run_id=run_id)
-        return model
+        return PythonSearchMLFlow().get_next_predictor_model(run_id=run_id)
 
     def get_run_id(self):
         return NextItemBaseModelV1.PRODUCTION_RUN_ID

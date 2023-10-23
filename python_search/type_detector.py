@@ -18,6 +18,6 @@ class TypeDetector:
         if result not in ["Snippet", "File", "Cmd"]:
             print("Failed to detect type, defaulting to Snippet")
             result = "Snippet"
-        print("Chat gpt result: " + result)
+        print(f"Chat gpt result: {result}")
 
         return result

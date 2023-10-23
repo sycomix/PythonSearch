@@ -30,16 +30,14 @@ class DescriptionGenerator:
             self._chars = PythonSearchMLFlow().get_entry_description_geneartor_dict(
                 run_id=DescriptionGenerator.RUN_ID
             )
-            self._char_indices = dict(
-                (char, self._chars.index(char)) for char in self._chars
-            )
+            self._char_indices = {char: self._chars.index(char) for char in self._chars}
         except Exception as e:
-            print("Could not load descritpion generator {}".format(e))
+            print(f"Could not load descritpion generator {e}")
             return
 
     def generate(self, cmd: EntryKeyGeneratorCmd):
         result = ""
-        for i in range(0, max_chars_from_key):
+        for _ in range(0, max_chars_from_key):
             text = cmd.content
             encoded = self._transform(text)
             preds = self._model.predict(encoded)
@@ -61,12 +59,10 @@ class DescriptionGenerator:
 
     def _transform(self, text):
         text_len = len(text)
-        missing_spaces = text_len < (maxlen - 3)
-
-        if missing_spaces:
+        if missing_spaces := text_len < (maxlen - 3):
             text = " " * missing_spaces
 
-        text = text + " = "
+        text = f"{text} = "
 
         encoded = np.zeros((1, maxlen, len(self._chars)))
 

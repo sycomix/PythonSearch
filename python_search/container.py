@@ -72,18 +72,14 @@ def run(
 
     environment_variables = " ".join(env_vars)
 
-    name_expr = ""
-    if name:
-        name_expr = f" --name {name} "
-
+    name_expr = f" --name {name} " if name else ""
     LIMIT_CPU = os.cpu_count()
     print(f"Found {LIMIT_CPU} CPUs in the machine")
-    LIMIT_CPU = os.environ["LIMIT_CPU"] if "LIMIT_CPU" in os.environ else LIMIT_CPU
+    LIMIT_CPU = os.environ.get("LIMIT_CPU", LIMIT_CPU)
     # more than 5 cpus is hardly useful
-    if LIMIT_CPU > 5:
-        LIMIT_CPU = 5
+    LIMIT_CPU = min(LIMIT_CPU, 5)
     cmd = f"docker run {name_expr} {port} {restart_exp} --expose=8000 --expose 4040 --expose 6380 --cpus={LIMIT_CPU} {environment_variables} -it {volumes} {entrypoint} ps {cmd}"
-    print("Cmd: " + cmd)
+    print(f"Cmd: {cmd}")
     os.system(cmd)
 
 
@@ -107,9 +103,7 @@ def shell():
 
 
 def run_jupyter(with_token=False, restart=False):
-    token_expression = " --NotebookApp.token=''"
-    if with_token:
-        token_expression = ""
+    token_expression = "" if with_token else " --NotebookApp.token=''"
     run(
         cmd=f"jupyter lab --allow-root --ip '*' --notebook-dir / {token_expression} --NotebookApp.password=''",
         port="8888:8888",

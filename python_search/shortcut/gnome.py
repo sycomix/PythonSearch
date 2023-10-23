@@ -60,7 +60,7 @@ class Gnome:
         get = lambda cmd: subprocess.check_output(["/bin/bash", "-c", cmd]).decode(
             "utf-8"
         )
-        array_str = get("gsettings get " + key)
+        array_str = get(f"gsettings get {key}")
         # in case the array was empty, remove the annotation hints
         command_result = array_str.lstrip("@as")
         current = eval(command_result)
@@ -75,10 +75,10 @@ class Gnome:
         # add the new keybinding to the list
         current.append(new)
         # create the shortcut, set the name, command and shortcut key
-        cmd0 = "gsettings set " + key + ' "' + str(current) + '"'
-        cmd1 = "gsettings set " + subkey1 + new + " name '" + name + "'"
-        cmd2 = "gsettings set " + subkey1 + new + " command '" + command + "'"
-        cmd3 = "gsettings set " + subkey1 + new + " binding '" + binding + "'"
+        cmd0 = f'gsettings set {key} "{str(current)}"'
+        cmd1 = f"gsettings set {subkey1}{new} name '{name}'"
+        cmd2 = f"gsettings set {subkey1}{new} command '{command}'"
+        cmd3 = f"gsettings set {subkey1}{new} binding '{binding}'"
 
         for cmd in [cmd0, cmd1, cmd2, cmd3]:
             print(f"CMD executing: {cmd}")
@@ -89,6 +89,4 @@ class Gnome:
         strip the string from all special characters lefting only [A-B-09]
         """
         result = "".join(e for e in string if e.isalnum())
-        result = result.lower()
-
-        return result
+        return result.lower()

@@ -36,7 +36,7 @@ class EntryEmbeddings:
             if key in entries:
                 body = str(entries[key])
                 print(f"For key '{key}', found body to encode: {body}")
-                unique_bodies.append(key + " " + body)
+                unique_bodies.append(f"{key} {body}")
             else:
                 print(f"Could not find body for key: {key}")
                 unique_bodies.append(key)
@@ -68,10 +68,7 @@ class EntryEmbeddings:
     def get_key_embedding(self, key) -> Optional[np.ndarray]:
         match = self._df[self._df.index == key].values
 
-        if len(match):
-            return match[0][0]
-
-        return None
+        return match[0][0] if len(match) else None
 
     def all_keys(self) -> List[str]:
         return self._df.index.values

@@ -36,16 +36,11 @@ def load_homepage():
             restart_app()
 
     with col3:
-        if st.checkbox("Add New Entry"):
-            open_add_new = True
-        else:
-            open_add_new = False
-
+        open_add_new = bool(st.checkbox("Add New Entry"))
     if open_add_new:
         key = st.text_input("Key")
         value = st.text_input("Value")
-        create = st.button("Create")
-        if create:
+        if create := st.button("Create"):
             cmd = f"python_search register_new register --key='{key}' --value='{value}' --tag=DataApp_Entry"
             st.write("Running: ", cmd)
             result = subprocess.check_output(cmd, shell=True, text=True)

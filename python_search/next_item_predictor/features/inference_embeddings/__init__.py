@@ -22,17 +22,20 @@ class EntriesEmbeddings:
         """
         Return an embedding based on the keys
         """
-        if not key in self.embedding_mapping or self.embedding_mapping[key] is None:
+        if (
+            key not in self.embedding_mapping
+            or self.embedding_mapping[key] is None
+        ):
             self._logger.info(
                 f"The embedding for ({key}) is empty in redis. Syncing the missing keys"
             )
             RedisEmbeddingsWriter().sync_missing()
             self.embedding_mapping = RedisEmbeddingsReader().load(self.all_keys)
 
-            if self.embedding_mapping[key] is None:
-                raise Exception(
-                    f"After trying to sync embedding  for key '{key}' is still empty"
-                )
+        if self.embedding_mapping[key] is None:
+            raise Exception(
+                f"After trying to sync embedding  for key '{key}' is still empty"
+            )
 
         return EmbeddingSerialization.read(self.embedding_mapping[key])
 
@@ -41,10 +44,10 @@ class EntriesEmbeddings:
         Look into the recently used keys and return the most recent for which there are embeddings
         """
         iterator = self.latest_used_entries.get_latest_used_keys()
-        self._logger.info("On get_recent_key all keys size: " + str(len(self.all_keys)))
-        self._logger.info("Number of latest used keys: " + str(len(iterator)))
+        self._logger.info(f"On get_recent_key all keys size: {len(self.all_keys)}")
+        self._logger.info(f"Number of latest used keys: {len(iterator)}")
 
-        self._logger.info("Mapping size: " + str(len(self.embedding_mapping)))
+        self._logger.info(f"Mapping size: {len(self.embedding_mapping)}")
         first_found = False
         for previous_key in iterator:
             if previous_key not in self.embedding_mapping:
@@ -63,6 +66,6 @@ class EntriesEmbeddings:
         print_mapping = False
         extra_message = ""
         if print_mapping:
-            extra_message = "Existing keys: " + str(self.embedding_mapping.keys())
+            extra_message = f"Existing keys: {str(self.embedding_mapping.keys())}"
 
-        raise Exception(f"Could not find a recent key with embeddings" + extra_message)
+        raise Exception(f"Could not find a recent key with embeddings{extra_message}")

@@ -123,8 +123,7 @@ class EntryRunner:
         matching_keys = []
         for registered_key in self._configuration.get_keys():
             encoded_registered_key = generate_identifier(registered_key)
-            matches_kv_encoded = key_regex.search(encoded_registered_key)
-            if matches_kv_encoded:
+            if matches_kv_encoded := key_regex.search(encoded_registered_key):
                 self._logger.info(f"{key} matches {encoded_registered_key}")
                 matching_keys.append(registered_key)
 
@@ -136,9 +135,7 @@ def generate_identifier(string):
     strip the string from all special characters lefting only [A-B-09]
     """
     result = "".join(e for e in string if e.isalnum())
-    result = result.lower()
-
-    return result
+    return result.lower()
 
 
 def main():

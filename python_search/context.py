@@ -21,10 +21,7 @@ class Context:
         return Context._instance
 
     def is_cli(self):
-        if os.environ.get("DISABLE_CLI"):
-            return False
-
-        return self._is_cli
+        return False if os.environ.get("DISABLE_CLI") else self._is_cli
 
     def enable_gui_mode(self):
         self._is_cli = False

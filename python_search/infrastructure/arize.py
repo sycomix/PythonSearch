@@ -19,15 +19,12 @@ class Arize:
         if not Arize.is_installed():
             return None
 
-        API_KEY = os.environ["ARIZE_API_KEY"]
         SPACE_KEY = os.environ["ARIZE_SPACE_KEY"]
 
+        API_KEY = os.environ["ARIZE_API_KEY"]
         if not API_KEY or not SPACE_KEY:
             print(
-                "Arize cannot be created without both API_KEY and SPACE_KEY, values: "
-                + API_KEY
-                + " "
-                + SPACE_KEY
+                f"Arize cannot be created without both API_KEY and SPACE_KEY, values: {API_KEY} {SPACE_KEY}"
             )
             return
 
@@ -35,13 +32,13 @@ class Arize:
 
         return Client(space_key=SPACE_KEY, api_key=API_KEY)
 
-    def arize_responses_helper(responses):
+    def arize_responses_helper(self):
         """
         responses: a list of responses from Arize
         returns: None
         """
-        responses = [responses]
-        for response in cf.as_completed(responses):
+        self = [self]
+        for response in cf.as_completed(self):
             res = response.result()
             print(res.status_code)
             if res.status_code != 200:

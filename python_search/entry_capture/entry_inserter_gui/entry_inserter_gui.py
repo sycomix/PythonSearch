@@ -175,11 +175,12 @@ class NewEntryGUI:
 
                 sys.exit(1)
 
-            if event and (event == "write" or event == "-entry-name-CTRL-s"):
-                break
+            if event:
+                if event in ["write", "-entry-name-CTRL-s"]:
+                    break
 
-            if event and (event == "-generate-body-" or event == "-entry-name-CTRL-g"):
-                self._generate_body_thread(values[self._ENTRY_NAME_INPUT], window)
+                if event in ["-generate-body-", "-entry-name-CTRL-g"]:
+                    self._generate_body_thread(values[self._ENTRY_NAME_INPUT], window)
 
             if event and (event == "-generate-title-"):
                 self._generate_title_thread(default_content, window)
@@ -201,10 +202,11 @@ class NewEntryGUI:
 
         selected_tags = []
         if self._tags:
-            for key, value in values.items():
-                if key in self._tags and value is True:
-                    selected_tags.append(key)
-
+            selected_tags.extend(
+                key
+                for key, value in values.items()
+                if key in self._tags and value is True
+            )
         result = GuiEntryData(
             values[self._ENTRY_NAME_INPUT],
             values[self._ENTRY_BODY_INPUT],
@@ -218,7 +220,7 @@ class NewEntryGUI:
         return result
 
     def _generate_body_thread(self, title: str, window):
-        send_notification(f"Starting to generate body")
+        send_notification("Starting to generate body")
 
         import PySimpleGUI as sg
 
@@ -246,12 +248,10 @@ class NewEntryGUI:
 
         with Popen(cmd, stdout=PIPE, stderr=None, shell=True) as process:
             output = process.communicate()[0].decode("utf-8")
-        if not process.returncode == 0:
-            return ""
-        return output
+        return "" if process.returncode != 0 else output
 
     def _update_title_with_url_title_thread(self, content: str, window):
-        send_notification(f"Starting to get url title")
+        send_notification("Starting to get url title")
         self._chat_gpt = LLMPrompt(window["generation-size"].get())
         import PySimpleGUI as sg
 
@@ -270,7 +270,7 @@ class NewEntryGUI:
         ).start()
 
     def _generate_title_thread(self, content: str, window):
-        send_notification(f"Starting to generate title")
+        send_notification("Starting to generate title")
         self._chat_gpt = LLMPrompt(window["generation-size"].get())
         import PySimpleGUI as sg
 

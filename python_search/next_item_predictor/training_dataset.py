@@ -47,8 +47,7 @@ class TrainingDataset:
         When cache is enabled, writes a parquet in a temporary file
         """
         if use_cache:
-            cache = self._read_cache()
-            if cache:
+            if cache := self._read_cache():
                 return cache
 
         dataset_with_aggregations = self._prepare_features()
@@ -78,9 +77,7 @@ class TrainingDataset:
 
         base_dataset = self._filter_unused_cols_and_add_autoincrement(all_dimensions)
 
-        features = self._compute_aggregations(all_dimensions, base_dataset)
-
-        return features
+        return self._compute_aggregations(all_dimensions, base_dataset)
 
     def _add_label_and_cleanup(self, all_features: DataFrame) -> DataFrame:
         """

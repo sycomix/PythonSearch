@@ -12,11 +12,11 @@ def get_random():
 
     all_entries = config.commands
 
-    reminders = {}
-    for entry, content in all_entries.items():
-        if "tags" in content and "Reminder" in content["tags"]:
-            reminders[entry] = content
-
+    reminders = {
+        entry: content
+        for entry, content in all_entries.items()
+        if "tags" in content and "Reminder" in content["tags"]
+    }
     import random
 
     random_key = random.choice(list(reminders.keys()))
@@ -42,7 +42,7 @@ def run_daemon():
     entries = ConfigurationLoader().load_entries()
     for key, entry in entries.items():
         if "schedules" in entry:
-            print("Found a schedule for key: " + key)
+            print(f"Found a schedule for key: {key}")
             for entry_schedule in entry["schedules"]:
                 entry_schedule(schedule).do(run_key, key)
 

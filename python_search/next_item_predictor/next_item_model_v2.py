@@ -284,8 +284,7 @@ class NextItemBaseModelV2(BaseModel):
         if not run_id:
             run_id = self.PRODUCTION_RUN_ID
 
-        model = PythonSearchMLFlow().get_next_predictor_model(run_id=run_id)
-        return model
+        return PythonSearchMLFlow().get_next_predictor_model(run_id=run_id)
 
     def get_run_id(self):
         return self.PRODUCTION_RUN_ID
@@ -299,16 +298,9 @@ class NextItemBaseModelV2(BaseModel):
         # add embeddings to the dataset
         collected_keys = dataset.select("key").collect()
 
-        all_keys = []
-        for i in collected_keys:
-            all_keys.append(i.key)
-
+        all_keys = [i.key for i in collected_keys]
         previous_1_keys = dataset.select("previous_key").collect()
-        for i in previous_1_keys:
-            all_keys.append(i.previous_key)
-
+        all_keys.extend(i.previous_key for i in previous_1_keys)
         previous_2_keys = dataset.select("previous_previous_key").collect()
-        for i in previous_2_keys:
-            all_keys.append(i.previous_previous_key)
-
+        all_keys.extend(i.previous_previous_key for i in previous_2_keys)
         return create_key_indexed_embedding(all_keys)

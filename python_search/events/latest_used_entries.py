@@ -25,7 +25,7 @@ class RecentKeys:
 
         import glob
 
-        list_of_files = sorted(filter(os.path.isfile, glob.glob(path + "/*")))
+        list_of_files = sorted(filter(os.path.isfile, glob.glob(f"{path}/*")))
 
         result = []
 
@@ -37,16 +37,11 @@ class RecentKeys:
             except:
                 continue
 
-            key = data["key"]
-            if not key:
-                continue
-            result.append(key)
+            if key := data["key"]:
+                result.append(key)
 
         seen = set()
-        seen_add = seen.add
-        result = [x for x in result if not (x in seen or seen_add(x))]
-
-        return result
+        return [x for x in result if x not in seen and not seen.add(x)]
 
     @staticmethod
     def add_latest_used(key):

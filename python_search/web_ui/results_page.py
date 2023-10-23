@@ -10,7 +10,7 @@ def load_results_page():
     from python_search.next_item_predictor import ModelInput
 
     st.write("### Prediction results")
-    st.write("##### Production run: " + Inference.PRODUCTION_RUN_ID)
+    st.write(f"##### Production run: {Inference.PRODUCTION_RUN_ID}")
 
     scenarios = {
         "work vs non work typical hours": {

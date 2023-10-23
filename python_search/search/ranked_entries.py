@@ -8,9 +8,8 @@ class RankedEntries:
 
     @staticmethod
     def get_list_of_tuples(from_keys: List[str], entities: dict) -> RankedEntries.type:
-        used_entries = []
-        for used_key in from_keys:
-            if used_key not in entities:
-                continue
-            used_entries.append((used_key, entities[used_key]))
-        return used_entries
+        return [
+            (used_key, entities[used_key])
+            for used_key in from_keys
+            if used_key in entities
+        ]

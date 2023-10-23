@@ -108,7 +108,7 @@ class RegisterNew:
         Register german workds you dont know by saving them to the clipboard and storing in python search
         """
 
-        if len(german_term) == 0:
+        if not german_term:
             raise RegisterNewException.empty_content()
 
         print(f"german term: {german_term}")

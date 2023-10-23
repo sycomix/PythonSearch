@@ -17,7 +17,7 @@ class FilesystemEntryInserter:
     def __init__(self, configuration: PythonSearchConfiguration):
         self._configuration = configuration
         self._file_to_append = (
-            self._configuration.get_project_root() + "/entries_main.py"
+            f"{self._configuration.get_project_root()}/entries_main.py"
         )
         self._new_entries_string = FilesystemEntryInserter.NEW_ENTRIES_STRING
 
@@ -58,7 +58,7 @@ class FilesystemEntryInserter:
             Compile to see if it is still valid python
             If so, then replaces it
         """
-        copy_file = self._file_to_append + "cpy"
+        copy_file = f"{self._file_to_append}cpy"
 
         print(f"Copying file as backup {self._file_to_append} => {copy_file}")
         shutil.copyfile(self._file_to_append, copy_file)

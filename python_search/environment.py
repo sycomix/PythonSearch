@@ -8,8 +8,8 @@ def is_mac():
 
 
 def is_archlinux():
-    return 0 == os.system("uname -r | grep -i ARCH")
+    return os.system("uname -r | grep -i ARCH") == 0
 
 
 def is_linux():
-    return 0 == os.system("/etc/*release | grep -i  linux")
+    return os.system("/etc/*release | grep -i  linux") == 0

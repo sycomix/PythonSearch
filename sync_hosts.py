@@ -31,7 +31,7 @@ def sync():
 
 def pull_cb(folder="/entries"):
     current_branch = get_current_branch()
-    os.system(f"cd {folder} ; git pull origin " + current_branch)
+    os.system(f"cd {folder} ; git pull origin {current_branch}")
 
 
 def get_current_branch(folder):
@@ -45,7 +45,7 @@ def get_current_branch(folder):
 def sync_repo(folder):
     print("====> Syncing entries project")
     current_branch = get_current_branch(folder)
-    print("Current branch: " + current_branch)
+    print(f"Current branch: {current_branch}")
 
     cmd = f"cd {folder} ; git add . ; git commit -m AutomaticChanges "
     os.system(cmd)

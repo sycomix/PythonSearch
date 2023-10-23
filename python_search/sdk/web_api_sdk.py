@@ -38,11 +38,7 @@ class PythonSearchWebAPISDK:
             url="http://localhost:8000/entry/generate_description",
             json=generator_cmd.dict(),
         )
-        if return_json:
-            return result.text
-
-        data = json.loads(result.text)
-        return data
+        return result.text if return_json else json.loads(result.text)
 
 
 def main():

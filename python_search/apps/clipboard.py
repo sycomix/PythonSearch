@@ -6,9 +6,7 @@ def chomp(x):
     """remove special chars from end of string"""
     if x.endswith("\r\n"):
         return x[:-2]
-    if x.endswith("\n") or x.endswith("\r"):
-        return x[:-1]
-    return x
+    return x[:-1] if x.endswith("\n") or x.endswith("\r") else x
 
 
 class Clipboard:
@@ -56,10 +54,7 @@ class Clipboard:
         with open("/tmp/clipboard_content", "w") as f:
             f.write(content)
 
-        clipboard_cmd = "xsel --clipboard --primary --input"
-        if is_mac():
-            clipboard_cmd = "pbcopy"
-
+        clipboard_cmd = "pbcopy" if is_mac() else "xsel --clipboard --primary --input"
         cmd = f"cat /tmp/clipboard_content | {clipboard_cmd}"
 
         from subprocess import PIPE, Popen
@@ -67,7 +62,7 @@ class Clipboard:
         with Popen(cmd, stdout=PIPE, stderr=None, shell=True) as process:
             output = process.communicate()[0].decode("utf-8")
             if process.returncode != 0:
-                raise Exception("Failed to copy to clipboard " + output)
+                raise Exception(f"Failed to copy to clipboard {output}")
 
         if enable_notifications or notify:
             from python_search.apps.notification_ui import send_notification
